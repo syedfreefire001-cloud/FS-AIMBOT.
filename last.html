@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSAIM BOT Official</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #050b18;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+#stars {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.glow {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    background: #006eff;
+    filter: blur(150px);
+    opacity: 0.18;
+    top: 20%;
+    left: 30%;
+    z-index: -1;
+    animation: glowMove 8s infinite alternate;
+}
+
+@keyframes glowMove {
+    from { transform: translate(-80px, -40px); }
+    to { transform: translate(150px, 100px); }
+}
+
+.top-line {
+    height: 3px;
+    background: linear-gradient(90deg, #00eaff, #743cff, #00eaff);
+    background-size: 200%;
+    animation: lineMove 3s linear infinite;
+}
+
+@keyframes lineMove {
+    from { background-position: 0%; }
+    to { background-position: 200%; }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 8%;
+    background: rgba(5, 15, 35, 0.85);
+    border-bottom: 1px solid #12345a;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #00eaff;
+    text-shadow: 0 0 15px #00aaff;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #00eaff;
+}
+
+.hero {
+    min-height: 390px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.hero h1 {
+    font-size: clamp(35px, 7vw, 65px);
+    color: #00eaff;
+    text-shadow: 0 0 25px #0077ff;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    color: #b8c9e8;
+    font-size: 17px;
+    margin-bottom: 28px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 13px 25px;
+    background: linear-gradient(90deg, #007bff, #00d9ff);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 15px #007bff66;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 25px #00cfff;
+}
+
+.discord-btn {
+    margin-top: 15px;
+    background: linear-gradient(90deg, #5865F2, #8b5cf6);
+}
+
+section {
+    padding: 45px 8%;
+}
+
+.section-title {
+    text-align: center;
+    color: #00eaff;
+    font-size: 30px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 12px #007bff;
+}
+
+.search-box {
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto 20px;
+    padding: 13px;
+    background: #0b1930;
+    color: white;
+    border: 1px solid #087bca;
+    border-radius: 8px;
+    outline: none;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.filter-btn {
+    background: #10223d;
+    color: white;
+    border: 1px solid #087bca;
+    padding: 9px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: #007bff;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+}
+
+.card {
+    background: linear-gradient(145deg, #101f38, #081326);
+    border: 1px solid #075d9d;
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 0 15px #0066aa22;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    border-color: #00eaff;
+    box-shadow: 0 0 25px #008cff55;
+}
+
+.card .symbol {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    color: #00eaff;
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: #b8c9e8;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.card .btn {
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    padding: 25px 15px;
+    color: #91a7c5;
+    border-top: 1px solid #12345a;
+    margin-top: 40px;
+}
+
+footer span {
+    color: #00eaff;
+}
+
+#loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #050b18;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s;
+}
+
+#loader h2 {
+    color: #00eaff;
+    margin-bottom: 20px;
+}
+
+.loader-bar {
+    width: 220px;
+    height: 7px;
+    background: #172b46;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.loader-progress {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #007bff, #00eaff);
+    animation: loading 2s ease forwards;
+}
+
+@keyframes loading {
+    to { width: 100%; }
+}
+
+@media(max-width: 600px) {
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    nav a {
+        margin: 0 7px;
+    }
+
+    section {
+        padding: 35px 6%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="loader">
+    <h2>FSAIM BOT</h2>
+    <div class="loader-bar">
+        <div class="loader-progress"></div>
+    </div>
+    <p style="margin-top:12px;color:#9ab5d8;">Loading...</p>
+</div>
+
+<canvas id="stars"></canvas>
+<div class="glow"></div>
+<div class="top-line"></div>
+
+<header>
+    <div class="logo">FSAIM BOT</div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#contact">Discord</a>
+    </nav>
+</header>
+
+<main>
+<section class="hero" id="home">
+    <h1>FSAIM BOT</h1>
+    <p>Welcome to FSAIM BOT Official Website</p>
+
+    <a href="#downloads" class="btn">Explore Now</a>
+
+    <a
+      href="https://discord.gg/9a3JvJwwY"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn discord-btn">
+      Join Our Discord
+    </a>
+</section>
+
+<section id="downloads">
+    <h2 class="section-title">Download Center</h2>
+
+    <input
+      type="text"
+      id="search"
+      class="search-box"
+      placeholder="Search downloads..."
+    >
+
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="emulator">Emulator</button>
+        <button class="filter-btn" data-filter="optimizer">Optimizer</button>
+        <button class="filter-btn" data-filter="apk">APK</button>
+    </div>
+
+    <div class="cards" id="downloadCards">
+
+        <!-- EMULATOR -->
+        <div class="card" data-category="emulator">
+            <div class="symbol">💻</div>
+            <h3>Emulator</h3>
+            <p>Download FSAIM BOT Emulator.</p>
+
+            <a
+              class="btn"
+              href="https://www.mediafire.com/file/txu0v8motf02l5f/Fs+AimBot+Emulator.exe/file"
+              target="_blank"
+              rel="noopener noreferrer">
+              Download Emulator
+            </a>
+        </div>
+
+        <!-- OPTIMIZER -->
+        <div class="card" data-category="optimizer">
+            <div class="symbol">⚡</div>
+            <h3>Optimizer</h3>
+            <p>Download FSAIM BOT Optimizer.</p>
+
+            <a
+              class="btn"
+              href="https://www.mediafire.com/file/we5omabwjfjwc1t/fs_aimbot.bat/file"
+              target="_blank"
+              rel="noopener noreferrer">
+              Download Optimizer
+            </a>
+        </div>
+
+        <!-- APK -->
+        <div class="card" data-category="apk">
+            <div class="symbol">📱</div>
+            <h3>Free Fire OB55 APK</h3>
+            <p>Download Free Fire OB55 APK file.</p>
+
+            <a
+              class="btn"
+              href="https://www.mediafire.com/file/3i3cmk35g1jdgj7/FREE+FIRE+OB55.xapk/file"
+              target="_blank"
+              rel="noopener noreferrer">
+              Download APK
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<section id="contact">
+    <h2 class="section-title">Join Our Community</h2>
+
+    <div class="card">
+        <div class="symbol">💬</div>
+        <h3>FSAIM BOT Discord</h3>
+        <p>Join our Discord server and connect with our community.</p>
+
+        <a
+          class="btn discord-btn"
+          href="https://discord.gg/9a3JvJwwY"
+          target="_blank"
+          rel="noopener noreferrer">
+          Join Discord Server
+        </a>
+    </div>
+</section>
+</main>
+
+<footer>
+    <p>© 2026 <span>FSAIM BOT</span> | All Rights Reserved</p>
+</footer>
+
+<script>
+// LOADING SCREEN
+window.addEventListener("load", function() {
+    setTimeout(function() {
+        const loader = document.getElementById("loader");
+        loader.style.opacity = "0";
+
+        setTimeout(function() {
+            loader.style.display = "none";
+        }, 500);
+    }, 2100);
+});
+
+// SEARCH
+const search = document.getElementById("search");
+const cards = document.querySelectorAll(".card[data-category]");
+
+search.addEventListener("input", function() {
+    const value = search.value.toLowerCase();
+
+    cards.forEach(function(card) {
+        const text = card.innerText.toLowerCase();
+        card.classList.toggle("hidden", !text.includes(value));
+    });
+});
+
+// CATEGORY FILTER
+const filterButtons = document.querySelectorAll(".filter-btn");
+
+filterButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+        filterButtons.forEach(function(btn) {
+            btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        const filter = button.dataset.filter;
+        const value = search.value.toLowerCase();
+
+        cards.forEach(function(card) {
+            const category = card.dataset.category;
+            const matchesCategory =
+                filter === "all" || category === filter;
+            const matchesSearch =
+                card.innerText.toLowerCase().includes(value);
+
+            card.classList.toggle(
+                "hidden",
+                !(matchesCategory && matchesSearch)
+            );
+        });
+    });
+});
+
+// ANIMATED STARS
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+let stars = [];
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    stars = [];
+
+    for (let i = 0; i < 90; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 0.5,
+            speed: Math.random() * 0.35 + 0.1
+        });
+    }
+}
+
+function animateStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    stars.forEach(function(star, index) {
+        star.y -= star.speed;
+
+        if (star.y < 0) {
+            star.y = canvas.height;
+            star.x = Math.random() * canvas.width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = "#48baff";
+        ctx.fill();
+
+        for (let j = index + 1; j < stars.length; j++) {
+            const other = stars[j];
+            const dx = star.x - other.x;
+            const dy = star.y - other.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 100) {
+                ctx.beginPath();
+                ctx.moveTo(star.x, star.y);
+                ctx.lineTo(other.x, other.y);
+                ctx.strokeStyle =
+                    "rgba(0, 160, 255," +
+                    (1 - distance / 100) * 0.2 + ")";
+                ctx.stroke();
+            }
+        }
+    });
+
+    requestAnimationFrame(animateStars);
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+animateStars();
+</script>
+
+</body>
+</html>
